@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: db
+    image: postgres:12-alpine
+    volumes:
+      - test_postgres:/var/lib/postgresql/data/
+    environment:
+      - TZ=America/Sao_Paulo
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - test
+
+  api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    entrypoint: ["./entrypoints/api.sh"]
+    volumes:
+      - ./app/:/opt/app/
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - test
+
+volumes:
+  test_postgres:
+
+networks:
+  test:

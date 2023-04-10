@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscando Cantores</title>
+</head>
+<body>
+
+    <div>
+
+        <form action="">
+            <input type="search" name="q" {% if term %} value="{{ term }}" {% endif %} />
+            <button type="submit">Pesquisar</button>
+        </form>
+
+    </div>
+
+    {% if singers %}
+        <main>
+            {% for item in singers %}
+                <div>
+                    <h3>{{item.name}}</h3>
+                    {% if item.rank or item.similarity %}
+                        <div>
+                            Rank: {{item.rank}}, Similaridade: {{item.similarity}}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </main>
+    {% endif %}
+    
+</body>
+</html>
