@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  db:
-    container_name: db
+  ftsdb:
+    container_name: ftsdb
     image: postgres:12-alpine
     volumes:
       - test_postgres:/var/lib/postgresql/data/
@@ -24,7 +24,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - db
+      - ftsdb
     networks:
       - test
 
