@@ -1,7 +1,17 @@
 asgiref==3.6.0
+attrs==23.1.0
 backports.zoneinfo==0.2.1
 Django==4.2
 djangorestframework==3.14.0
+drf-spectacular==0.26.2
+importlib-resources==5.12.0
+inflection==0.5.1
+jsonschema==4.17.3
+pkgutil_resolve_name==1.3.10
 psycopg2==2.9.6
+pyrsistent==0.19.3
 pytz==2023.3
+PyYAML==6.0
 sqlparse==0.4.3
+uritemplate==4.1.1
+zipp==3.15.0
