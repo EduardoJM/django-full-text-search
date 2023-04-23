@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.template import loader
+from django.utils.encoding import force_str
 from django.db.models import Q
 from django.contrib.postgres.search import (
     SearchQuery,
@@ -9,6 +10,7 @@ from django.contrib.postgres.search import (
 )
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.settings import api_settings
+from rest_framework.compat import coreapi, coreschema
 
 class FullTextSearchFilter(BaseFilterBackend):
     search_param = api_settings.SEARCH_PARAM
@@ -67,3 +69,31 @@ class FullTextSearchFilter(BaseFilterBackend):
         }
         template = loader.get_template(self.template)
         return template.render(context)
+
+    def get_schema_fields(self, view):
+        assert coreapi is not None, 'coreapi must be installed to use `get_schema_fields()`'
+        assert coreschema is not None, 'coreschema must be installed to use `get_schema_fields()`'
+        return [
+            coreapi.Field(
+                name=self.search_param,
+                required=False,
+                location='query',
+                schema=coreschema.String(
+                    title=force_str(self.search_title),
+                    description=force_str(self.search_description)
+                )
+            )
+        ]
+
+    def get_schema_operation_parameters(self, view):
+        return [
+            {
+                'name': self.search_param,
+                'required': False,
+                'in': 'query',
+                'description': force_str(self.search_description),
+                'schema': {
+                    'type': 'string',
+                },
+            },
+        ]
