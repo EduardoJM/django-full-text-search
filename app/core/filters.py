@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from rest_framework.filters import BaseFilterBackend
-from rest_framework.settings import api_settings
+from django.template import loader
 from django.db.models import Q
 from django.contrib.postgres.search import (
     SearchQuery,
@@ -8,9 +7,14 @@ from django.contrib.postgres.search import (
     SearchVector,
     TrigramSimilarity,
 )
+from rest_framework.filters import BaseFilterBackend
+from rest_framework.settings import api_settings
 
 class FullTextSearchFilter(BaseFilterBackend):
     search_param = api_settings.SEARCH_PARAM
+    template = 'rest_framework/filters/search.html'
+    search_title = _('Search')
+    search_description = _('A search term.')
 
     def get_config(self, view, request):
         return getattr(view, "search_config", None)
@@ -51,3 +55,15 @@ class FullTextSearchFilter(BaseFilterBackend):
         ).order_by("-rank", "-similarity")
 
         return queryset
+
+    def to_html(self, request, queryset, view):
+        if not getattr(view, 'search_fields', None):
+            return ''
+
+        term = self.get_search_term(request)
+        context = {
+            'param': self.search_param,
+            'term': term
+        }
+        template = loader.get_template(self.template)
+        return template.render(context)
