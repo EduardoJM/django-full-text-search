@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from texto.models import Singer
+from singers.models import Singer
 
 SINGERS = [
     "Alok",

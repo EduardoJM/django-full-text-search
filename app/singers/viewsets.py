@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
-from texto.models import Singer
-from texto.serializers import SingerSerializer
-from core.filters import FullTextSearchFilter
+from singers.models import Singer
+from singers.serializers import SingerSerializer
+from search.filters import FullTextSearchFilter
 
 class SingerViewSet(ModelViewSet):
     queryset = Singer.objects.all()

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from texto.models import Singer
+from singers.models import Singer
 
 class SingerSerializer(serializers.ModelSerializer):
     rank = serializers.FloatField(read_only=True, default=0)
